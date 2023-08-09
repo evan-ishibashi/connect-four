@@ -1,5 +1,35 @@
 "use strict";
 
+/**
+ * what HTML would be useful for the game board itself?
+  Have a div for each of the boxes within one big game board
+  Separate classes for red / yellow toggling
+how could you represent a played-piece in the HTML board?
+  add classes
+in the JavaScript, what would be a good structure for the in-memory game board?
+  Use nested Arrays to track the game board for rows / columns matrix
+  Can use indeces for the played game piece
+what might the flow of the game be?
+  Player 1
+  Add piece to board by changing class
+  Check if win - if no win, then go to player 2
+
+
+Function names / Descriptions
+
+  function createGameBoard
+    possibly use button
+
+  function addGamePiece
+    place red or yellow piece
+    maybe have separate function for each player?
+
+  function checkForWinner
+    Checks for 4 of the same color piece in a row.
+ */
+
+
+
 /** Connect Four
  *
  * Player 1 and 2 alternate turns. On each turn, a piece is dropped down a
@@ -7,11 +37,11 @@
  * board fills (tie)
  */
 
-var WIDTH = 7;
-var HEIGHT = 6;
+const WIDTH = 7;
+const HEIGHT = 6;
 
-var currPlayer = 1; // active player: 1 or 2
-var board = []; // array of rows, each row is array of cells  (board[y][x])
+let currPlayer = 1; // active player: 1 or 2
+let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
@@ -19,20 +49,30 @@ var board = []; // array of rows, each row is array of cells  (board[y][x])
 
 function makeBoard() {
   // TODO: set "board" to empty HEIGHT x WIDTH matrix array
+
+let rowLine =[];
+for (let c = 0; c < HEIGHT;c++ ){
+
+  for (let r = 0; r < WIDTH; r++){
+    rowLine.push(null);
+  }
+  board.push(rowLine);
+  rowLine = [];
+  }
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
-  var htmlBoard = document.getElementById('board');
+  const htmlBoard = document.getElementById('board');
 
   // TODO: add comment for this code
-  var top = document.createElement("tr");
+  const top = document.createElement("tr");
   top.setAttribute("id", "column-top");
-  
+
   // TODO: add comment for this code
-  for (var x = 0; x < WIDTH; x++) {
-    var headCell = document.createElement("td");
+  for (let x = 0; x < WIDTH; x++) {
+    const headCell = document.createElement("td");
     headCell.setAttribute("id", `top-${x}`);
     headCell.addEventListener("click", handleClick);
     top.append(headCell);
@@ -42,10 +82,10 @@ function makeHtmlBoard() {
   // dynamically creates the main part of html board
   // uses HEIGHT to create table rows
   // uses WIDTH to create table cells for each row
-  for (var y = 0; y < HEIGHT; y++) {
+  for (let y = 0; y < HEIGHT; y++) {
     // TODO: Create a table row element and assign to a "row" variable
 
-    for (var x = 0; x < WIDTH; x++) {
+    for (let x = 0; x < WIDTH; x++) {
       // TODO: Create a table cell element and assign to a "cell" variable
 
       // TODO: add an id, c-y-x, to the above table cell element
@@ -82,10 +122,10 @@ function endGame(msg) {
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  var x = +evt.target.id;
+  const x = +evt.target.id; // Possibly change to const or let
 
   // get next spot in column (if none, ignore click)
-  var y = findSpotForCol(x);
+  let y = findSpotForCol(x); //Possibly change to const
   if (y === null) {
     return;
   }
@@ -125,8 +165,8 @@ function checkForWin() {
   // using HEIGHT and WIDTH, generate "check list" of coordinates
   // for 4 cells (starting here) for each of the different
   // ways to win: horizontal, vertical, diagonalDR, diagonalDL
-  for (var y = 0; y < HEIGHT; y++) {
-    for (var x = 0; x < WIDTH; x++) {
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
       // TODO: assign values to the below variables for each of the ways to win
       // horizontal has been assigned for you
       // each should be an array of 4 cell coordinates:
