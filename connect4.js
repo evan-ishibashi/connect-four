@@ -108,7 +108,12 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 5
-  return 5;
+  for (let y = HEIGHT-1; y >= 0; y--) {
+    if (!board[y][x]) {
+      return y;
+    }
+  }
+  return null;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
@@ -118,9 +123,8 @@ function placeInTable(y, x) {
   const gamePiece = document.createElement('div');
   gamePiece.classList.add('piece',`p${currPlayer}`);
 
-
-  const cell = document.getElementById(`c-${y}-${x}`);
-  debugger;
+  const cellId = `c-${y}-${x}`
+  const cell = document.getElementById(cellId);
   cell.append(gamePiece);
 
 }
@@ -135,7 +139,7 @@ function endGame(msg) {
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  const x = +evt.target.id; // Possibly change to const or let
+  let x = +(evt.target.id)[(evt.target.id).length-1]; // Possibly change to const or let
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x); //Possibly change to const
@@ -144,8 +148,9 @@ function handleClick(evt) {
   }
 
   // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board
+  // update in-memory board
   placeInTable(y, x);
+  board[y][x] = currPlayer;
 
   // check for win
   if (checkForWin()) {
